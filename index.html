@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boutique Comores - Import & Transit</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f6f8; color: #333; padding-bottom: 60px; }
+        header { background: #00838f; color: white; padding: 1rem; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; flex-direction: column; justify-content: space-between; }
+        .card img { width: 100%; height: 180px; object-fit: cover; }
+        .card-content { padding: 15px; }
+        .card-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 8px; }
+        .card-price { color: #2e7d32; font-weight: bold; font-size: 1.1rem; margin-bottom: 12px; }
+        .btn-add { background: #00838f; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn-add:hover { background: #006064; }
+        /* Style du Panier */
+        .cart-container { background: white; border-radius: 8px; padding: 20px; margin-top: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .cart-item { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .cart-total { font-size: 1.2rem; font-weight: bold; text-align: right; margin-top: 15px; }
+        .btn-whatsapp { background: #25D366; color: white; border: none; padding: 15px; width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1.1rem; margin-top: 15px; text-align: center; display: block; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🇰🇲 Comores Import Express</h1>
+    <p>Commandez vos articles préférés livrés à Moroni</p>
+</header>
+
+<div class="container">
+    <h2 style="margin-bottom: 15px;">Nos Produits en Stock & Sur Commande</h2>
+    
+    <!-- Grille de Produits -->
+    <div class="grid">
+        <!-- Produit 1 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500" alt="TMAX 530">
+            <div class="card-content">
+                <div class="card-title">Yamaha TMAX 530 (Occasion)</div>
+                <div class="card-price">2 450 000 KMF (~5 000 €)</div>
+                <button class="btn-add" onclick="ajouterAuPanier('TMAX 530', 2450000)">Ajouter au panier</button>
+            </div>
+        </div>
+
+        <!-- Produit 2 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" alt="Baskets">
+            <div class="card-content">
+                <div class="card-title">Baskets de Sport (Qualité A)</div>
+                <div class="card-price">15 000 KMF (~30 €)</div>
+                <button class="btn-add" onclick="ajouterAuPanier('Baskets de Sport', 15000)">Ajouter au panier</button>
+            </div>
+        </div>
+
+        <!-- Produit 3 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1509395062183-67c5ad6faff9?w=500" alt="Kit Solaire">
+            <div class="card-content">
+                <div class="card-title">Kit Solaire Maison + 3 Lampes</div>
+                <div class="card-price">45 000 KMF (~90 €)</div>
+                <button class="btn-add" onclick="ajouterAuPanier('Kit Solaire 3 Lampes', 45000)">Ajouter au panier</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section Panier -->
+    <div class="cart-container">
+        <h2>🛒 Votre Panier</h2>
+        <div id="cart-list" style="margin-top: 15px;">
+            <p style="color: #777;">Votre panier est vide pour le moment.</p>
+        </div>
+        <div class="cart-total" id="cart-total">Total : 0 KMF</div>
+        
+        <!-- REMPLACE LE NUMÉRO CI-DESSOUS PAR TON NUMÉRO WHATSAPP (Format International sans +) -->
+        <button class="btn-whatsapp" onclick="envoyerCommande()">📲 Finaliser la commande sur WhatsApp</button>
+    </div>
+</div>
+
+<script>
+    let panier = [];
+    let total = 0;
+    
+    // Entrez votre numéro WhatsApp ici (ex: 269XXXXXXXX)
+    const monNumeroWhatsApp = "2693300000"; 
+
+    function ajouterAuPanier(nom, prix) {
+        panier.push({ nom, prix });
+        total += prix;
+        afficherPanier();
+    }
+
+    function afficherPanier() {
+        const cartList = document.getElementById('cart-list');
+        const cartTotal = document.getElementById('cart-total');
+        
+        if (panier.length === 0) {
+            cartList.innerHTML = '<p style="color: #777;">Votre panier est vide pour le moment.</p>';
+            cartTotal.innerText = 'Total : 0 KMF';
+            return;
+        }
+
+        cartList.innerHTML = '';
+        panier.forEach((item, index) => {
+            cartList.innerHTML += `
+                <div class="cart-item">
+                    <span>${item.nom}</span>
+                    <span><b>${item.prix.toLocaleString()} KMF</b></span>
+                </div>
+            `;
+        });
+
+        cartTotal.innerText = `Total : ${total.toLocaleString()} KMF`;
+    }
+
+    function envoyerCommande() {
+        if (panier.length === 0) {
+            alert("Votre panier est vide ! Veuillez ajouter des produits.");
+            return;
+        }
+
+        let message = "Bonjour ! Je souhaite passer une commande depuis le site :\n\n";
+        panier.forEach((item, i) => {
+            message += `${i + 1}. ${item.nom} - ${item.prix.toLocaleString()} KMF\n`;
+        });
+        message += `\n*TOTAL : ${total.toLocaleString()} KMF*`;
+
+        const url = `https://wa.me/${monNumeroWhatsApp}?text=${encodeURIComponent(message)}`;
+        window.open(url, '_blank');
+    }
+</script>
+
+</body>
+</html>
